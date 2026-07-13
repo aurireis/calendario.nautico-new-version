@@ -1,0 +1,18 @@
+# Segredos e variáveis de ambiente — NUNCA versionar
+.env
+.env.*
+!.env.example
+
+# Dependências
+node_modules/
+
+# Build/cache do Netlify
+.netlify/
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+*.log
