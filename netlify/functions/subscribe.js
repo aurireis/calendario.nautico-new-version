@@ -11,9 +11,7 @@ console.log("TESTE: A função iniciou!");
 //   GMAIL_APP_PASSWORD     -> a SENHA DE APP gerada em myaccount.google.com/apppasswords
 //                             (NÃO é a senha normal da conta — precisa ter a verificação
 //                             em 2 etapas ativada pra gerar essa senha de app)
-//   TWILIO_ACCOUNT_SID     -> conta Twilio (WhatsApp)
-//   TWILIO_AUTH_TOKEN      -> token Twilio
-//   TWILIO_WHATSAPP_FROM   -> número habilitado para WhatsApp na Twilio, ex: "whatsapp:+14155238886"
+
 //
 // Proteções aplicadas aqui (importante ler se for alterar este arquivo):
 //   - todo texto vindo do visitante passa por sanitizeText() antes de ser usado
@@ -28,7 +26,12 @@ console.log("TESTE: A função iniciou!");
 
 const nodemailer = require('nodemailer');
 const twilio = require('twilio');
-const { getStore } = require('@netlify/blobs');
+JavaScript
+const store = getStore({
+  name: 'nautico-subscriptions',
+  siteID: process.env.NETLIFY_SITE_ID,
+  token: process.env.NETLIFY_API_TOKEN
+});
 const { sanitizeText, isValidEmail, isValidBrPhoneDigits, isValidISODate, clientIp, checkRateLimit } = require('./_security');
 
 function buildTransporter() {
@@ -111,7 +114,11 @@ exports.handler = async (event) => {
 
     // 2) guarda a inscrição para o lembrete automático de véspera (se a data do evento é conhecida)
     if (eventDate) {
-      const store = getStore('nautico-subscriptions');
+      const store = getStore({
+        name: 'nautico-subscriptions',
+        siteID: process.env.NETLIFY_SITE_ID,
+        token: process.env.NETLIFY_API_TOKEN
+      });
       const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
       await store.setJSON(id, {
         name, channel, contact, eventTitle, eventWhen, eventDate,
