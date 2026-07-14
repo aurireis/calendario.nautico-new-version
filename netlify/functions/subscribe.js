@@ -1,3 +1,4 @@
+console.log("TESTE: A função iniciou!");
 // netlify/functions/subscribe.js
 //
 // Recebe a inscrição feita no modal "Avisar-me", grava num Netlify Blob
