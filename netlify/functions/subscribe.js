@@ -1,4 +1,5 @@
 console.log("TESTE: A função iniciou!");
+const { getStore } = require('@netlify/blobs');
 // netlify/functions/subscribe.js
 //
 // Recebe a inscrição feita no modal "Avisar-me", grava num Netlify Blob
