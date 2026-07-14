@@ -26,7 +26,7 @@ console.log("TESTE: A função iniciou!");
 
 const nodemailer = require('nodemailer');
 const twilio = require('twilio');
-JavaScript
+
 const store = getStore({
   name: 'nautico-subscriptions',
   siteID: process.env.NETLIFY_SITE_ID,
