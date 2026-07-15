@@ -45,7 +45,11 @@ function clientIp(event) {
 // mesma `key` (ex: mesmo e-mail, mesmo IP). Retorna true se DENTRO do
 // limite (ação permitida), false se estourou.
 async function checkRateLimit(key, limit, windowMs) {
-  const store = getStore('nautico-ratelimit');
+  const store = getStore({
+  name: 'nautico-ratelimit',
+  siteID: process.env.NETLIFY_SITE_ID,
+  token: process.env.NETLIFY_API_TOKEN
+});
   const safeKey = 'rl-' + Buffer.from(key).toString('base64url').slice(0, 120);
   const now = Date.now();
 
