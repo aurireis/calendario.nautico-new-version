@@ -82,6 +82,7 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
 </button>
 
+<!-- =================== MODAL — somente e-mail =================== -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <button class="close" id="closeModal" aria-label="Fechar">
@@ -91,23 +92,27 @@
     <h3 id="modalTitle">Evento</h3>
     <p class="sub" id="modalWhen">Data</p>
     <form id="notifyForm">
-      <input type="text" id="website" name="website" autocomplete="off" tabindex="-1" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;" aria-hidden="true">
-      <div class="field"><label for="fName">Nome</label><input id="fName" type="text" required placeholder="Seu nome"></div>
+      <!-- honeypot anti-bot (invisível para humanos) -->
+      <input type="text" id="website" name="website" autocomplete="off" tabindex="-1"
+             style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true">
+
       <div class="field">
-        <label>Como avisar</label>
-        <div class="channel-row">
-          <label><input type="radio" name="channel" value="whatsapp" checked><span>WhatsApp</span></label>
-          <label><input type="radio" name="channel" value="email"><span>E-mail</span></label>
-        </div>
+        <label for="fName">Nome</label>
+        <input id="fName" type="text" required placeholder="Seu nome">
       </div>
+
       <div class="field">
-        <label for="fContact" id="contactLabel">Seu número de WhatsApp</label>
-        <input id="fContact" type="tel" required placeholder="(71) 90000-0000">
-        <p class="hint" id="contactHint">Vamos abrir o WhatsApp com o lembrete já escrito — é só apertar enviar.</p>
+        <label for="fContact">Seu e-mail</label>
+        <input id="fContact" type="email" required placeholder="voce@email.com">
+        <p class="hint">Você receberá um lembrete por e-mail um dia antes do evento.</p>
       </div>
+
       <button type="submit" class="submit-btn" id="submitBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Abrir WhatsApp com o lembrete
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0 1.1.9 2 2 2z"/>
+          <polyline points="22,6 12,12 2,6"/>
+        </svg>
+        Ativar alerta por e-mail
       </button>
     </form>
   </div>
