@@ -6,7 +6,6 @@
 // e limpa inscrições de eventos já bem passados.
 
 const nodemailer = require('nodemailer');
-const twilio = require('twilio');
 const { getStore } = require('@netlify/blobs');
 
 function buildTransporter() {
@@ -20,15 +19,18 @@ function buildTransporter() {
 }
 
 exports.handler = async () => {
-  const store = getStore('nautico-subscriptions');
+  const store = getStore({
+    name: 'nautico-subscriptions',
+    siteID: process.env.NETLIFY_SITE_ID,
+    token: process.env.NETLIFY_API_TOKEN
+  });
+  
   const { blobs } = await store.list();
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const transporter = buildTransporter();
-  const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-
   let sentCount = 0;
 
   for (const b of blobs) {
@@ -42,7 +44,9 @@ exports.handler = async () => {
     if (diffDays === 1) {
       const message = `📅 Lembrete: "${sub.eventTitle}" é amanhã (${sub.eventWhen})! ` +
         `Calendário de Eventos Náuticos 2026 — Secretaria Especial do Mar, Salvador.`;
+      
       try {
+        // Envio exclusivo por e-mail
         if (sub.channel === 'email') {
           await transporter.sendMail({
             from: `"Calendário Náutico 2026" <${process.env.GMAIL_USER}>`,
@@ -50,17 +54,11 @@ exports.handler = async () => {
             subject: `Amanhã: ${sub.eventTitle}`,
             text: message,
           });
-        } else {
-          const digits = sub.contact.replace(/\D/g, '');
-          const phone = digits.length <= 11 ? `55${digits}` : digits;
-          await twilioClient.messages.create({
-            from: process.env.TWILIO_WHATSAPP_FROM,
-            to: `whatsapp:+${phone}`,
-            body: message,
-          });
+          
+          // Marca como enviado apenas após o sucesso do e-mail
+          await store.setJSON(b.key, { ...sub, sent: true });
+          sentCount++;
         }
-        await store.setJSON(b.key, { ...sub, sent: true });
-        sentCount++;
       } catch (err) {
         console.error('Falha ao enviar lembrete para', b.key, err);
       }
