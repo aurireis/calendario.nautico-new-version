@@ -12,7 +12,7 @@ const CATS = {
 const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
 /* ---------------- events dataset (from official 2026 program) ---------------- */
-const EV = [
+let EV = [
  {m:0,d:'23–25',s:'2026-01-23',e:'2026-01-25',t:'Tour das Ilhas 2026',c:'regata'},
  {m:0,d:'24',s:'2026-01-24',e:'2026-01-24',t:'Desafio 60 Km — Volta à Ilha dos Frades',c:'outros'},
  {m:0,d:'29–31',s:'2026-01-29',e:'2026-01-31',t:'Regata Tour Salvador – Ilhéus',c:'regata'},
@@ -268,46 +268,30 @@ document.getElementById('closeModal').addEventListener('click', closeModal);
 overlay.addEventListener('click', e=>{ if(e.target===overlay) closeModal(); });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
 
-/* dynamic contact field: WhatsApp number vs e-mail address */
+/* dynamic contact field: email only */
 const contactLabel = document.getElementById('contactLabel');
 const contactInput = document.getElementById('fContact');
 const contactHint = document.getElementById('contactHint');
 const submitBtn = document.getElementById('submitBtn');
-const whatsIcon = '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>';
 const mailIcon = '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>';
 
 function updateContactField(){
-  const val = document.querySelector('input[name="channel"]:checked').value;
-  if(val === 'whatsapp'){
-    contactLabel.textContent = 'Seu número de WhatsApp';
-    contactInput.type = 'tel';
-    contactInput.placeholder = '(71) 90000-0000';
-    contactHint.textContent = 'Vamos abrir o WhatsApp com o lembrete já escrito — é só apertar enviar.';
-    submitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${whatsIcon}</svg> Abrir WhatsApp com o lembrete`;
-  } else {
-    contactLabel.textContent = 'Seu e-mail';
-    contactInput.type = 'email';
-    contactInput.placeholder = 'voce@email.com';
-    contactHint.textContent = 'Vamos abrir seu aplicativo de e-mail com o lembrete já escrito — é só apertar enviar.';
-    submitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${mailIcon}</svg> Abrir e-mail com o lembrete`;
-  }
+  contactLabel.textContent = 'Seu e-mail';
+  contactInput.type = 'email';
+  contactInput.placeholder = 'voce@email.com';
+  contactHint.textContent = 'Você receberá um lembrete por e-mail um dia antes do evento.';
+  submitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${mailIcon}</svg> Ativar alerta por e-mail`;
 }
-document.querySelectorAll('input[name="channel"]').forEach(r=>r.addEventListener('change', updateContactField));
 updateContactField();
 
 document.getElementById('notifyForm').addEventListener('submit', async e=>{
   e.preventDefault();
-  const channel = document.querySelector('input[name="channel"]:checked').value;
+  const channel = 'email'; // Force email only
   const contact = contactInput.value.trim();
   const name = document.getElementById('fName').value.trim();
   const title = modalTitle.textContent;
   const when = modalWhen.textContent;
   const date = overlay.dataset.eventDate || '';
-
-  if(channel === 'whatsapp'){
-    const digits = contact.replace(/\D/g,'');
-    if(digits.length < 10){ contactInput.focus(); contactHint.textContent = 'Digite um número válido, com DDD.'; contactHint.style.color = 'var(--coral)'; return; }
-  }
 
   const originalBtn = submitBtn.innerHTML;
   submitBtn.disabled = true;
@@ -330,12 +314,8 @@ document.getElementById('notifyForm').addEventListener('submit', async e=>{
     if(!res.ok) throw new Error('api-error');
 
     closeModal();
-    showToast('Alerta ativado ✔', channel==='whatsapp'
-      ? `Enviamos uma confirmação para o seu WhatsApp. Vamos te lembrar de novo perto de "${title}".`
-      : `Enviamos uma confirmação para o seu e-mail. Vamos te lembrar de novo perto de "${title}".`);
+    showToast('Alerta ativado ✔', `Enviamos uma confirmação para o seu e-mail. Vamos te lembrar de novo perto de "${title}".`);
   } catch(err){
-    // A function de notificação ainda não está publicada/configurada nesta instância —
-    // usamos o envio local (abre WhatsApp/e-mail do usuário) como alternativa imediata.
     sendViaClientFallback(channel, contact, title, when);
     closeModal();
   } finally{
@@ -346,15 +326,8 @@ document.getElementById('notifyForm').addEventListener('submit', async e=>{
 
 function sendViaClientFallback(channel, contact, title, when){
   const msg = `Lembrete náutico: ${title}\nQuando: ${when}\nCalendário de Eventos Náuticos 2026 - Secretaria Especial do Mar, Salvador.`;
-  if(channel === 'whatsapp'){
-    const digits = contact.replace(/\D/g,'');
-    const phone = digits.length <= 11 ? '55' + digits : digits;
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-    showToast('Servidor de notificações indisponível', 'Abrimos o WhatsApp no seu aparelho como alternativa — envie por lá.');
-  } else {
-    window.location.href = `mailto:${contact}?subject=${encodeURIComponent('Lembrete: '+title)}&body=${encodeURIComponent(msg)}`;
-    showToast('Servidor de notificações indisponível', 'Abrimos seu app de e-mail como alternativa — envie por lá.');
-  }
+  window.location.href = `mailto:${contact}?subject=${encodeURIComponent('Lembrete: '+title)}&body=${encodeURIComponent(msg)}`;
+  showToast('Servidor de notificações indisponível', 'Abrimos seu app de e-mail como alternativa — envie por lá.');
 }
 
 function showToast(title, msg){
@@ -394,7 +367,6 @@ async function loadLiveEvents(){
       EV = data.events;
     }
   } catch(err){
-    // função ainda não publicada/configurada nesta instância — segue com os dados fixos acima
     console.warn('Usando calendário local (get-events indisponível):', err.message);
   }
 }
