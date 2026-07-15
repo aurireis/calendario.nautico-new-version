@@ -1,4 +1,6 @@
 # Calendário de Eventos Náuticos 2026 — notificações via Gmail (SMTP) e WhatsApp
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Faurireis%2Fcalendario.nautico-new-version.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Faurireis%2Fcalendario.nautico-new-version?ref=badge_shield)
+
 
 Este pacote tem o site (`index.html` + `styles/` + `scripts/` + `assets/`) e
 duas Netlify Functions que enviam a notificação de verdade quando alguém
@@ -130,3 +132,7 @@ Netlify (mesmo lugar das outras):
   recentes automaticamente; se a function não estiver disponível por
   qualquer motivo, ele cai de volta na lista fixa que já vem no arquivo,
   então o site nunca fica com a tela em branco.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Faurireis%2Fcalendario.nautico-new-version.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Faurireis%2Fcalendario.nautico-new-version?ref=badge_large)
