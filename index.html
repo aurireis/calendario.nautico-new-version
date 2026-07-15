@@ -82,7 +82,7 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
 </button>
 
-<!-- =================== MODAL — somente e-mail =================== -->
+<!-- =================== MODAL =================== -->
 <div class="overlay" id="overlay">
   <div class="modal">
     <button class="close" id="closeModal" aria-label="Fechar">
@@ -92,7 +92,6 @@
     <h3 id="modalTitle">Evento</h3>
     <p class="sub" id="modalWhen">Data</p>
     <form id="notifyForm">
-      <!-- honeypot anti-bot (invisível para humanos) -->
       <input type="text" id="website" name="website" autocomplete="off" tabindex="-1"
              style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true">
 
@@ -102,9 +101,9 @@
       </div>
 
       <div class="field">
-        <label for="fContact">Seu e-mail</label>
+        <label for="fContact" id="contactLabel">Seu e-mail</label>
         <input id="fContact" type="email" required placeholder="voce@email.com">
-        <p class="hint">Você receberá um lembrete por e-mail um dia antes do evento.</p>
+        <p class="hint" id="contactHint">Você receberá um lembrete por e-mail um dia antes do evento.</p>
       </div>
 
       <button type="submit" class="submit-btn" id="submitBtn">
