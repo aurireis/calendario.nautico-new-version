@@ -57,7 +57,7 @@ let EV = [
  {m:6,d:'11',s:'2026-07-11',e:'2026-07-11',t:'1º Etapa CBVO – FVOBA (Dia 25)',c:'ranking'},
  {m:6,d:'16',s:'2026-07-16',e:'2026-07-16',t:'Natação — 6ª Etapa Campeonato Baiano de Águas Abertas',c:'natacao'},
  {m:6,d:'22',s:'2026-07-22',e:'2026-07-22',t:'57ª Regata Aratu – Maragogipe',c:'regata'},
- {m:6,d:'23–26',s:'2026-07-23',e:'2026-07-26',t:'5ª Edição do Barco Show',c:'festival'},
+ 
  {m:6,d:'29–30',s:'2026-07-29',e:'2026-07-30',t:'Campeonato Baiano',c:'campeonato'},
  {m:7,d:'01–02',s:'2026-08-01',e:'2026-08-02',t:'7º Etapa do Ranking Baiano da Classe HPE 25',c:'ranking'},
  {m:7,d:'01–02',s:'2026-08-01',e:'2026-08-02',t:'Regata Salvador – Morro de São Paulo',c:'regata'},
