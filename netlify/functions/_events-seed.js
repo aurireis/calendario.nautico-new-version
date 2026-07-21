@@ -11,7 +11,7 @@ const CATS = {
 
 const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
-let EV = [
+const EV = [
  {m:0,d:'23–25',s:'2026-01-23',e:'2026-01-25',t:'Tour das Ilhas 2026',c:'regata'},
  {m:0,d:'24',s:'2026-01-24',e:'2026-01-24',t:'Desafio 60 Km — Volta à Ilha dos Frades',c:'outros'},
  {m:0,d:'29–31',s:'2026-01-29',e:'2026-01-31',t:'Regata Tour Salvador – Ilhéus',c:'regata'},
