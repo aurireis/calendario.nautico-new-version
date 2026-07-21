@@ -1,0 +1,10 @@
+{
+  "name": "calendario-nautico-2026",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Calendário de Eventos Náuticos 2026 - Secretaria Especial do Mar, Salvador (site + notificações por e-mail via Gmail SMTP)",
+  "dependencies": {
+    "nodemailer": "^6.9.15",
+    "@netlify/blobs": "^8.1.0"
+  }
+}
