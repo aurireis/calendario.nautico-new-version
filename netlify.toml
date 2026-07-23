@@ -9,6 +9,13 @@
 [functions."send-reminders"]
   schedule = "@daily"
 
+# --- BLOCO NOVO QUE RESOLVE O ERRO DA API ---
+[[redirects]]
+  from = "/api/subscribe"
+  to = "/.netlify/functions/subscribe"
+  status = 200
+# --------------------------------------------
+
 # cabeçalhos de segurança aplicados a todas as páginas
 [[headers]]
   for = "/*"

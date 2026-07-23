@@ -1,7 +1,7 @@
 /* ---------------- category metadata ---------------- */
 const CATS = {
-  regata:     { label:'Regata',         color:'var(--c-regata)',     icon:'<path d="M12 3v12"/><path d="M12 3l5 9H12z" fill="currentColor" stroke="none" opacity=".9"/><path d="M12 7l-4 8h4z" fill="currentColor" stroke="none" opacity=".55"/><path d="M4 18h16l-2 3H6z"/>' },
-  copa:       { label:'Copa & Taça',         color:'var(--c-copa)',       icon:'<path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4v2a3 3 0 0 0 3 3"/><path d="M17 5h3v2a3 3 0 0 1-3 3"/><line x1="12" y1="13" x2="12" y2="17"/><path d="M9 17h6l1 4H8l1-4z"/>' },
+  regata:     { label:'Regata',        color:'var(--c-regata)',     icon:'<path d="M12 3v12"/><path d="M12 3l5 9H12z" fill="currentColor" stroke="none" opacity=".9"/><path d="M12 7l-4 8h4z" fill="currentColor" stroke="none" opacity=".55"/><path d="M4 18h16l-2 3H6z"/>' },
+  copa:       { label:'Copa & Taça',        color:'var(--c-copa)',       icon:'<path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4v2a3 3 0 0 0 3 3"/><path d="M17 5h3v2a3 3 0 0 1-3 3"/><line x1="12" y1="13" x2="12" y2="17"/><path d="M9 17h6l1 4H8l1-4z"/>' },
   campeonato: { label:'Campeonato',          color:'var(--c-campeonato)', icon:'<path d="M7 3l3 7"/><path d="M17 3l-3 7"/><circle cx="12" cy="15" r="6"/><circle cx="12" cy="15" r="2.2"/>' },
   ranking:    { label:'Ranking & Etapa',     color:'var(--c-ranking)',     icon:'<line x1="5" y1="19" x2="5" y2="13"/><line x1="12" y1="19" x2="12" y2="9"/><line x1="19" y1="19" x2="19" y2="5"/>' },
   natacao:    { label:'Natação & Polo',      color:'var(--c-natacao)',     icon:'<path d="M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M2 14c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M2 20c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>' },
@@ -57,7 +57,6 @@ let EV = [
  {m:6,d:'11',s:'2026-07-11',e:'2026-07-11',t:'1º Etapa CBVO – FVOBA (Dia 25)',c:'ranking'},
  {m:6,d:'16',s:'2026-07-16',e:'2026-07-16',t:'Natação — 6ª Etapa Campeonato Baiano de Águas Abertas',c:'natacao'},
  {m:6,d:'22',s:'2026-07-22',e:'2026-07-22',t:'57ª Regata Aratu – Maragogipe',c:'regata'},
- 
  {m:6,d:'29–30',s:'2026-07-29',e:'2026-07-30',t:'Campeonato Baiano',c:'campeonato'},
  {m:7,d:'01–02',s:'2026-08-01',e:'2026-08-02',t:'7º Etapa do Ranking Baiano da Classe HPE 25',c:'ranking'},
  {m:7,d:'01–02',s:'2026-08-01',e:'2026-08-02',t:'Regata Salvador – Morro de São Paulo',c:'regata'},
@@ -407,10 +406,33 @@ if (topBtn) {
 const clockDate = document.getElementById('clockDate');
 if (clockDate) clockDate.textContent = today.toLocaleDateString('pt-BR', {day:'2-digit', month:'short', year:'numeric'}).toUpperCase();
 
+/* ---------------- carrega eventos dinâmicos (dashboard) ---------------- */
+async function loadEvents(){
+  try {
+    const res = await fetch('/.netlify/functions/get-events');
+    if (!res.ok) throw new Error('Falha ao buscar eventos');
+    const data = await res.json();
+    if (Array.isArray(data.events) && data.events.length > 0) {
+      EV = data.events;
+    }
+  } catch (err) {
+    console.warn('Não foi possível carregar eventos dinâmicos, usando lista fixa:', err);
+  }
+}
+
 /* ---------------- init ---------------- */
 (function init(){
+  // primeiro render imediato com a lista fixa (site nunca fica em branco)
   renderChips();
   renderMonthNav();
   renderStats();
   renderAll();
+
+  // depois tenta atualizar com os dados reais do dashboard
+  loadEvents().then(()=>{
+    renderChips();
+    renderMonthNav();
+    renderStats();
+    renderAll();
+  });
 })();
