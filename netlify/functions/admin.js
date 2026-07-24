@@ -60,17 +60,15 @@ exports.handler = async (event) => {
     return { statusCode: 500, body: JSON.stringify({ error: 'ADMIN_PASSWORD não configurada no servidor.' }) };
   }
 
-  // limita tentativas de senha por IP, antes mesmo de checar se ela está certa
-  const ip = clientIp(event);
+  // checa a senha primeiro; só conta/limita tentativas quando ela está ERRADA
+const ip = clientIp(event);
+if (!password || !timingSafeEqual(password, process.env.ADMIN_PASSWORD)) {
   const withinLimit = await checkRateLimit(`admin-login:${ip}`, 8, 15 * 60 * 1000);
   if (!withinLimit) {
     return { statusCode: 429, body: JSON.stringify({ error: 'Muitas tentativas. Aguarde alguns minutos e tente de novo.' }) };
   }
-
-  if (!password || !timingSafeEqual(password, process.env.ADMIN_PASSWORD)) {
-    return unauthorized();
-  }
-
+  return unauthorized();
+}
   try {
     if (action === 'login') {
       return { statusCode: 200, body: JSON.stringify({ ok: true }) };
