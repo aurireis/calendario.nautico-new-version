@@ -357,13 +357,14 @@ document.getElementById('notifyForm').addEventListener('submit', async (e) => {
   const originalBtnHTML = submitBtn.innerHTML;
   
   // Pegando dados do modal (campos hidden que devem estar no seu index.html)
-  const payload = {
-    name: document.getElementById('fName').value.trim(),
-    email: document.getElementById('fContact').value.trim(),
-    event_title: modalTitle.textContent,
-    event_date: overlay.dataset.eventDate,
-    _gotcha: form.querySelector('[name="_gotcha"]')?.value || ''
-  };
+ const payload = {
+  name: document.getElementById('fName').value.trim(),
+  contact: document.getElementById('fContact').value.trim(),
+  eventTitle: modalTitle.textContent,
+  eventWhen: modalWhen.textContent,
+  eventDate: overlay.dataset.eventDate,
+  website: form.querySelector('[name="_gotcha"]')?.value || ''
+};
 
   submitBtn.disabled = true;
   submitBtn.innerHTML = 'Enviando…';
